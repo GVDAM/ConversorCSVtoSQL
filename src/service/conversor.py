@@ -33,14 +33,15 @@ def ConverterDados(df):
     colunas = ObterColunas(df)
     registros = ObterRegistros(df)
     insert = GerarInsert(colunas, registros)
+    print('ConverterDados: ' + insert)
 
     return insert
 
 def GerarSql(df):
     # df = pd.read_csv('teste.csv', sep=';')
     sql = ConverterDados(df)
-
+    print('GerarSql: ' + sql)
     return sql
 
 if __name__ == '__main__':
-    pass
+    GerarSql()
