@@ -7,12 +7,12 @@ def ObterColunas(df):
 	Return:
 	- (list) colunas
 	"""
-    colunas = []
+	colunas = []
 
-    for col in df.columns:
-        colunas.append(col)
-    
-    return colunas
+	for col in df.columns:
+		colunas.append(col)
+
+	return colunas
 
 def ObterRegistros(df):
 	"""
@@ -20,32 +20,32 @@ def ObterRegistros(df):
 	Return:
 	- (list) registros
 	"""
-    registros = []
+	registros = []
 
-    for registro in df[:].values[:]:
-        registros.append(tuple(registro))
+	for registro in df[:].values[:]:
+		registros.append(tuple(registro))
 
-    return registros
+	return registros
 
 def GerarInsert(colunas, registros):
 	"""
 	Converte a lista de colunas e valores do DataFrame em
 	uma string de código em SQL para INSERT.
-	
+
 	Return:
 	- (str) inserts 
 	"""
-    header = f'insert into table ({", ".join(colunas)}) values'
-    body = ' '
+	header = f'insert into table ({", ".join(colunas)}) values'
+	body = ' '
 
-    for reg in registros:
-        if reg != registros[-1]:
-            body += f'{reg},\n'
-        else:
-            body += f'{reg};\n'
+	for reg in registros:
+		if reg != registros[-1]:
+			body += f'{reg},\n'
+		else:
+			body += f'{reg};\n'
 
-    insert = header + body
-    return insert
+	insert = header + body
+	return insert
 
 def ConverterDados(df):
 	"""
@@ -54,12 +54,12 @@ def ConverterDados(df):
 	Return:
 	- (str) insert
 	"""
-    colunas = ObterColunas(df)
-    registros = ObterRegistros(df)
-    insert = GerarInsert(colunas, registros, nomeTabela)
-    print('ConverterDados: ' + insert)
+	colunas = ObterColunas(df)
+	registros = ObterRegistros(df)
+	insert = GerarInsert(colunas, registros, nomeTabela)
+	print('ConverterDados: ' + insert)
 
-    return insert
+	return insert
 
 def GerarSql(df):
 	"""
@@ -68,14 +68,15 @@ def GerarSql(df):
 	Return:
 	- 
 	"""
-    # df = pd.read_csv('teste.csv', sep=';')
-    sql = ConverterDados(df, nomeTabela)
-    print('GerarSql: ' + sql)
-    #verificar se não existe algum .sql salvo. Caso exista, exlcuir
-    file = open(f'insert_{nomeTabela}.sql', 'w')
-    file.write(sql.replace(' \'', ' \"').replace('\',', '\",').replace('\')', '\")'))
-    file.close()
-    return sql
+	# df = pd.read_csv('teste.csv', sep=';')
+	sql = ConverterDados(df, nomeTabela)
+	print('GerarSql: ' + sql)
+	#verificar se não existe algum .sql salvo. Caso exista, exlcuir
+	file = open(f'insert_{nomeTabela}.sql', 'w')
+ 	sql = sql.replace(' \'', ' \"').replace('\',', '\",').replace('\')', '\")')
+	file.write(sql)
+	file.close()
+	return sql
 
 if __name__ == '__main__':
-    GerarSql()
+GerarSql()
