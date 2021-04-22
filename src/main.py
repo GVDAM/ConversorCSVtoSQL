@@ -1,25 +1,17 @@
 from fastapi import FastAPI
 from fastapi import FastAPI, File, UploadFile
 import pandas as pd
+from service.conversor import GerarSql
 from io import BytesIO
 
-# Instancia um objeto para iniciar a aplicação
 app = FastAPI()
 
 @app.post("/files/")
-async def create_file(file: UploadFile = File(...)):
-    """
-	Função assíncrona que recebe um arquivo.
-    """
-    # O arquivo uploaded é lido como um 
+async def create_file(file: UploadFile = File(...), nomeTabela: str = ''):
     contents = await file.read()
-    # O conteúdo do arquivo é convertido em Bytes
     arquivo = BytesIO(contents)
-    # O arquivo convertido é transformado em DataFrame
-    df = pd.read_csv(arquivo)
-    print(type(contents))
-    print(type(arquivo))
-    print(df)
+    df = pd.read_csv(arquivo, sep=',', encoding='utf-8')
+    sql = GerarSql(df, nomeTabela)    
 
-    return { 'file.name': file.filename, 
-             'dataFrame': df[:1].values[0][0][0] }
+    return { 'file.name': file.filename,
+             'SQL': sql}

@@ -1,6 +1,11 @@
 import pandas as pd
 
 def ObterColunas(df):
+	"""
+	Obtém as colunas do DataFrame passado como argumento.
+	Return:
+	- (list) colunas
+	"""
     colunas = []
 
     for col in df.columns:
@@ -9,6 +14,11 @@ def ObterColunas(df):
     return colunas
 
 def ObterRegistros(df):
+	"""
+	Obtém a lista de valores do DataFrame.
+	Return:
+	- (list) registros
+	"""
     registros = []
 
     for registro in df[:].values[:]:
@@ -17,6 +27,13 @@ def ObterRegistros(df):
     return registros
 
 def GerarInsert(colunas, registros):
+	"""
+	Converte a lista de colunas e valores do DataFrame em
+	uma string de código em SQL para INSERT.
+	
+	Return:
+	- (str) inserts 
+	"""
     header = f'insert into table ({", ".join(colunas)}) values'
     body = ' '
 
@@ -30,6 +47,12 @@ def GerarInsert(colunas, registros):
     return inserts
 
 def ConverterDados(df):
+	"""
+	Executa a conversão de um DataFrame para uma string com
+	código SQL com INSERT.
+	Return:
+	- (str) insert
+	"""
     colunas = ObterColunas(df)
     registros = ObterRegistros(df)
     insert = GerarInsert(colunas, registros)
@@ -37,6 +60,12 @@ def ConverterDados(df):
     return insert
 
 def GerarSql(df):
+	"""
+	Por que precisa dessa função?
+
+	Return:
+	- 
+	"""
     # df = pd.read_csv('teste.csv', sep=';')
     sql = ConverterDados(df)
 
