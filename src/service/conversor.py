@@ -1,4 +1,5 @@
 import pandas as pd
+import codecs
 import os
 
 def ObterColunas(df):
@@ -47,36 +48,31 @@ def GerarInsert(colunas, registros):
 	insert = header + body
 	return insert
 
-def ConverterDados(df):
+def GerarSql(df, nomeTabela):
 	"""
 	Executa a conversão de um DataFrame para uma string com
 	código SQL com INSERT.
 	Return:
 	- (str) insert
 	"""
+	#verificar se não existe algum .sql salvo. Caso exista, exlcuir
+	
 	colunas = ObterColunas(df)
 	registros = ObterRegistros(df)
-	insert = GerarInsert(colunas, registros, nomeTabela)
+	insert = GerarInsert(colunas, registros)
 	print('ConverterDados: ' + insert)
 
-	return insert
+	diretorio = os.listdir('service/csv')
+	if len(diretorio) > 0:
+		for arquivo in diretorio:
+			os.remove(f'service/csv/{arquivo}')
 
-def GerarSql(df):
-	"""
-	Por que precisa dessa função?
-
-	Return:
-	- 
-	"""
-	# df = pd.read_csv('teste.csv', sep=';')
-	sql = ConverterDados(df, nomeTabela)
-	print('GerarSql: ' + sql)
-	#verificar se não existe algum .sql salvo. Caso exista, exlcuir
-	file = open(f'insert_{nomeTabela}.sql', 'w')
- 	sql = sql.replace(' \'', ' \"').replace('\',', '\",').replace('\')', '\")')
+	file = codecs.open(f'service/csv/insert_{nomeTabela}.sql', 'w', 'utf-8')
+	sql = insert.replace(' \'', ' \"').replace('\',', '\",').replace('\')', '\")')
 	file.write(sql)
 	file.close()
+
 	return sql
 
 if __name__ == '__main__':
-GerarSql()
+	pass
