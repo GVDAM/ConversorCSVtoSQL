@@ -6,9 +6,9 @@ from io import BytesIO
 
 app = FastAPI()
 
-@app.get()
+@app.get("/")
 async def healthcheck():
-    return {"status": "O Pai Ta On"};
+    return {"status": "O Pai Ta On"}
 
 @app.post("/files/")
 async def create_file(file: UploadFile = File(...), nomeTabela: str = ''):
