@@ -13,5 +13,4 @@ async def create_file(file: UploadFile = File(...), nomeTabela: str = ''):
     df = pd.read_csv(arquivo, sep=',', encoding='utf-8')
     sql = GerarSql(df, nomeTabela)    
 
-    return { 'file.name': file.filename,
-             'SQL': sql}
+    return {'SQL': sql}

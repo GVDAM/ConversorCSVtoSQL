@@ -28,7 +28,7 @@ def ObterRegistros(df):
 
 	return registros
 
-def GerarInsert(colunas, registros):
+def GerarInsert(colunas, nomeTabela, registros):
 	"""
 	Converte a lista de colunas e valores do DataFrame em
 	uma string de código em SQL para INSERT.
@@ -36,7 +36,7 @@ def GerarInsert(colunas, registros):
 	Return:
 	- (str) inserts 
 	"""
-	header = f'insert into table ({", ".join(colunas)}) values'
+	header = f'insert into {nomeTabela} ({", ".join(colunas)}) values' 
 	body = ' '
 
 	for reg in registros:
@@ -59,16 +59,15 @@ def GerarSql(df, nomeTabela):
 	
 	colunas = ObterColunas(df)
 	registros = ObterRegistros(df)
-	insert = GerarInsert(colunas, registros)
-	print('ConverterDados: ' + insert)
+	insert = GerarInsert(colunas, nomeTabela, registros)
 
-	diretorio = os.listdir('service/csv')
+	diretorio = os.listdir('service/sql')
 	if len(diretorio) > 0:
 		for arquivo in diretorio:
-			os.remove(f'service/csv/{arquivo}')
+			os.remove(f'service/sql/{arquivo}')
 
-	file = codecs.open(f'service/csv/insert_{nomeTabela}.sql', 'w', 'utf-8')
-	sql = insert.replace(' \'', ' \"').replace('\',', '\",').replace('\')', '\")')
+	file = codecs.open(f'service/sql/insert_{nomeTabela}.sql', 'w', 'utf-8')
+	sql = insert.replace(', \'', ', \"').replace('\',', '\",').replace('\'),', '\"),').replace('\');', '\");')
 	file.write(sql)
 	file.close()
 
